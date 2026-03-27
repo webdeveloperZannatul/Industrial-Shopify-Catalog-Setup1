@@ -1,0 +1,782 @@
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Springs OS — Industrial Shopify Spring Catalog Setup</title>
+<meta name="description" content="We build lightning-fast, industrial-styled Shopify catalogs for 100–500 springs with metafield-driven filters (wire dia, OD, length, material, spring rate, load)." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        brand: {
+          50: '#fff4ed',
+          100: '#ffe6d5',
+          200: '#ffcaa8',
+          300: '#ffa66f',
+          400: '#ff7a33',
+          500: '#ff5a00', // logo orange
+          600: '#e24e00',
+          700: '#b83e00',
+          800: '#933300',
+          900: '#782b00',
+        },
+        steel: {
+          25: '#fcfcfd',
+          50: '#f5f7fa',
+          100: '#eef1f5',
+          200: '#dde3ea',
+          300: '#c7cfda',
+          400: '#a8b3c2',
+          500: '#8794a6',
+          600: '#6a7789',
+          700: '#525c6b',
+          800: '#3d4550',
+          900: '#262b31',
+        }
+      },
+      boxShadow: {
+        soft: '0 10px 25px -10px rgba(0,0,0,0.15)',
+        card: '0 6px 18px -6px rgba(0,0,0,0.12)'
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial'],
+        mono: ['Roboto Mono', 'ui-monospace', 'SFMono-Regular']
+      }
+    }
+  }
+}
+</script>
+<style>
+  /* Industrial subtle grid background */
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  /* Hide number input spinners */
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0;}
+  input[type=number] { -moz-appearance: textfield; }
+  .spec td { padding: .4rem .6rem; }
+  .sticky-filter { position: sticky; top: 84px; }
+  .glass {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+</style>
+</head>
+<body class="bg-white text-steel-900 antialiased selection:bg-brand-500 selection:text-white">
+<!-- Top Bar -->
+<div class="w-full bg-steel-900 text-white text-xs">
+  <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
+    <p class="tracking-wide">Shopify Specialists for Industrial & Engineering Stores</p>
+    <p class="hidden sm:block opacity-80">Delivery in 10–15 days • Metafield-driven filtering • Mobile optimized</p>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-white/90 glass border-b border-steel-100">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex items-center justify-between py-3">
+      <a href="#" class="flex items-center gap-3">
+        <img src="https://i.postimg.cc/MTb6z0Md/SPRINGSOS-LOGO-orange-transparent.png" alt="Springs OS Logo" class="h-9 w-auto">
+        <span class="font-extrabold text-lg tracking-tight">Springs<span class="text-brand-500">OS</span></span>
+      </a>
+      <nav class="hidden lg:flex items-center gap-8 text-sm font-medium">
+        <a href="#catalog" class="hover:text-brand-600">Catalog Demo</a>
+        <a href="#filters" class="hover:text-brand-600">Filters</a>
+        <a href="#product" class="hover:text-brand-600">Product Page</a>
+        <a href="#deliverables" class="hover:text-brand-600">Deliverables</a>
+        <a href="#case" class="hover:text-brand-600">Live Example</a>
+        <a href="#contact" class="hover:text-brand-600">Contact</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <a href="#contact" class="hidden sm:inline-flex items-center gap-2 rounded-md bg-brand-500 px-4 py-2 text-white font-semibold shadow-soft hover:bg-brand-600 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          Get Proposal
+        </a>
+        <button id="menuBtn" class="lg:hidden inline-flex items-center justify-center h-10 w-10 rounded-md border border-steel-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobileMenu" class="lg:hidden hidden border-t border-steel-100 py-3">
+      <nav class="grid gap-3 text-sm font-medium">
+        <a href="#catalog" class="py-2">Catalog Demo</a>
+        <a href="#filters" class="py-2">Filters</a>
+        <a href="#product" class="py-2">Product Page</a>
+        <a href="#deliverables" class="py-2">Deliverables</a>
+        <a href="#case" class="py-2">Live Example</a>
+        <a href="#contact" class="py-2">Contact</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0">
+    <img src="https://images4.alphacoders.com/685/685362.jpg?q=80&w=2400&auto=format&fit=crop" alt="Industrial background" class="h-full w-full object-cover">
+    <div class="absolute inset-0 bg-white/65"></div>
+    <div class="absolute inset-0 grid-bg opacity-100"></div>
+  </div>
+  <div class="relative max-w-7xl mx-auto px-4 py-20 lg:py-28">
+    <div class="grid lg:grid-cols-2 gap-10 items-center">
+      <div>
+        <div class="inline-flex items-center gap-2 rounded-full border border-steel-200 bg-white px-3 py-1 text-xs font-semibold text-steel-700 shadow-card">
+          <span class="inline-block h-2 w-2 rounded-full bg-brand-500"></span> Industrial Shopify Catalog Setup
+        </div>
+        <h1 class="mt-5 text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight">
+          Turn your spring CSV into a <span class="text-brand-500">lightning-fast</span> industrial catalog.
+        </h1>
+        <p style="color:black;" class="mt-5 text-steel-700 text-lg max-w-xl">
+          I’ll map 100–500 SKUs, build metafield-driven filters (wire dia, OD, length, material, rate, load), and deliver an industrial-styled Shopify theme with engineer-friendly product pages.
+        </p>
+        <div class="mt-7 flex flex-col sm:flex-row gap-3">
+          <a href="#catalog" class="inline-flex items-center justify-center gap-2 rounded-md bg-brand-500 px-5 py-3 font-semibold text-white shadow-soft hover:bg-brand-600 transition">
+            See Filter Demo
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M13 5l7 7-7 7M5 12h14"/></svg>
+          </a>
+          <a href="#case" class="inline-flex items-center justify-center gap-2 rounded-md border border-steel-300 px-5 py-3 font-semibold text-steel-800 hover:border-steel-400 hover:bg-steel-50 transition">
+            View Live Shopify Example
+          </a>
+        </div>
+        <div class="mt-6 flex items-center gap-6 text-xs text-steel-600">
+          <div class="flex items-center gap-2"><svg class="h-4 w-4 text-brand-500" viewBox="0 0 24 24" fill="currentColor"><path  d="M9 16.2l-3.5-3.5-1.4 1.4 4.9 4.9 10-10-1.4-1.4z"/></svg> 10–15 day delivery</div>
+          <div class="flex items-center gap-2"><svg class="h-4 w-4 text-brand-500" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2l-3.5-3.5-1.4 1.4 4.9 4.9 10-10-1.4-1.4z"/></svg> Metafields for speed & scale</div>
+          <div class="flex items-center gap-2"><svg class="h-4 w-4 text-brand-500" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2l-3.5-3.5-1.4 1.4 4.9 4.9 10-10-1.4-1.4z"/></svg> Mobile optimized</div>
+        </div>
+      </div>
+      <div class="relative">
+        <div class="absolute -top-8 -right-8 h-24 w-24 rounded-xl bg-brand-500/10 blur-2xl"></div>
+        <div class="relative rounded-2xl border border-steel-200 bg-white p-4 shadow-soft">
+          <img src="https://i.postimg.cc/J48TyNyx/shopify-iamges-1.webp" alt="Shopify industrial catalog preview" class="rounded-xl border border-steel-100">
+          <div class="mt-4 grid grid-cols-3 gap-3 text-center text-xs">
+            <div class="rounded-lg bg-steel-50 p-3 border border-steel-100">
+              <p class="font-mono text-steel-500">Wire Dia</p>
+              <p class="font-bold text-steel-900">0.5–6.0 mm</p>
+            </div>
+            <div class="rounded-lg bg-steel-50 p-3 border border-steel-100">
+              <p class="font-mono text-steel-500">OD</p>
+              <p class="font-bold text-steel-900">5–80 mm</p>
+            </div>
+            <div class="rounded-lg bg-steel-50 p-3 border border-steel-100">
+              <p class="font-mono text-steel-500">Length</p>
+              <p class="font-bold text-steel-900">10–500 mm</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Trust / Proof -->
+<section style="background-color: rgb(15 21 39);" class="border-y border-steel-100 bg-steel-25">
+  <div class="max-w-7xl mx-auto px-4 py-8 flex flex-wrap items-center justify-between gap-6">
+    <p class="text-xs uppercase tracking-wider text-steel-500 font-semibold">Built for engineers, buyers & distributors</p>
+    <div class="flex items-center gap-8 opacity-70 grayscale">
+      <img  src="https://dummyimage.com/120x32/cccccc/ffffff&text=INDUSTRY+CO" class="h-6" alt="">
+      <img src="https://dummyimage.com/100x32/cccccc/ffffff&text=MECH+WORKS" class="h-6" alt="">
+      <img src="https://dummyimage.com/110x32/cccccc/ffffff&text=SPRINGTECH" class="h-6" alt="">
+      <img src="https://dummyimage.com/90x32/cccccc/ffffff&text=AUTOPARTS" class="h-6" alt="">
+    </div>
+  </div>
+</section>
+
+<!-- Why / Value Props -->
+<section class="py-16 lg:py-20">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="max-w-2xl">
+      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Industrial-styled, engineer-first Shopify build</h2>
+      <p class="mt-3 text-steel-700">No glossy lifestyle noise. Clean greys, functional icons, whitespace, and spec-first layouts that let technical buyers confirm fit in seconds.</p>
+    </div>
+    <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="rounded-2xl border border-steel-200 p-6 shadow-card bg-white">
+        <div class="h-10 w-10 rounded-lg bg-brand-500/10 flex items-center justify-center">
+          <svg class="h-5 w-5 text-brand-600" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18v4H3V5zm0 5h18v4H3v-4zm0 5h18v4H3v-4z"/></svg>
+        </div>
+        <h3 class="mt-4 font-bold">CSV → 500 SKUs</h3>
+        <p class="mt-1 text-sm text-steel-700">Import & map your sheet. Variants, images, SEO, and metafields created automatically.</p>
+      </div>
+      <div class="rounded-2xl border border-steel-200 p-6 shadow-card bg-white">
+        <div class="h-10 w-10 rounded-lg bg-brand-500/10 flex items-center justify-center">
+          <svg class="h-5 w-5 text-brand-600" viewBox="0 0 24 24" fill="currentColor"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg>
+        </div>
+        <h3 class="mt-4 font-bold">Metafield Filters</h3>
+        <p class="mt-1 text-sm text-steel-700">Wire dia, OD, length, material, spring rate, load—fast client-side filtering.</p>
+      </div>
+      <div class="rounded-2xl border border-steel-200 p-6 shadow-card bg-white">
+        <div class="h-10 w-10 rounded-lg bg-brand-500/10 flex items-center justify-center">
+          <svg class="h-5 w-5 text-brand-600" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 5v5l4 2-.8 1.6L11 13V7h2z"/></svg>
+        </div>
+        <h3 class="mt-4 font-bold">Spec-First PDP</h3>
+        <p class="mt-1 text-sm text-steel-700">Key specs above the fold in an at-a-glance table. No scrolling to confirm fit.</p>
+      </div>
+      <div class="rounded-2xl border border-steel-200 p-6 shadow-card bg-white">
+        <div class="h-10 w-10 rounded-lg bg-brand-500/10 flex items-center justify-center">
+          <svg class="h-5 w-5 text-brand-600" viewBox="0 0 24 24" fill="currentColor"><path d="M7 7h10v10H7zM3 3h4v4H3zM17 3h4v4h-4zM3 17h4v4H3zM17 17h4v4h-4z"/></svg>
+        </div>
+        <h3 class="mt-4 font-bold">Speed & Mobile</h3>
+        <p class="mt-1 text-sm text-steel-700">Lean theme, lazy images, and clean code for high Lighthouse scores.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Catalog Demo with Filters -->
+<section id="catalog" class="py-8 lg:py-12 bg-steel-50 border-y border-steel-100">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex items-end justify-between gap-4 flex-wrap">
+      <div>
+        <h2 class="text-3xl font-extrabold tracking-tight">Catalog with Metafield Filters</h2>
+        <p class="text-steel-700 mt-1">Filter instantly by wire diameter, OD, length, material, spring rate, and load.</p>
+      </div>
+      <div class="text-xs text-steel-600">Demo uses sample data (replace with your CSV).</div>
+    </div>
+
+    <div class="mt-6 grid lg:grid-cols-12 gap-6">
+      <!-- Filters -->
+      <aside id="filters" class="lg:col-span-3">
+        <div class="rounded-2xl border border-steel-200 bg-white p-5 shadow-card sticky-filter">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold">Filters</h3>
+            <button id="resetFilters" class="text-xs font-semibold text-brand-600 hover:text-brand-700">Reset</button>
+          </div>
+
+          <!-- Wire Dia -->
+          <div class="mt-5">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-steel-500">Wire Diameter (mm)</label>
+            <div class="mt-2 grid grid-cols-2 gap-2">
+              <input id="wireMin" type="number" step="0.1" placeholder="Min" class="w-full rounded-md border border-steel-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <input id="wireMax" type="number" step="0.1" placeholder="Max" class="w-full rounded-md border border-steel-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+          </div>
+
+          <!-- OD -->
+          <div class="mt-5">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-steel-500">Outer Diameter (mm)</label>
+            <div class="mt-2 grid grid-cols-2 gap-2">
+              <input id="odMin" type="number" step="0.1" placeholder="Min" class="w-full rounded-md border border-steel-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <input id="odMax" type="number" step="0.1" placeholder="Max" class="w-full rounded-md border border-steel-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+          </div>
+
+          <!-- Length -->
+          <div class="mt-5">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-steel-500">Free Length (mm)</label>
+            <div class="mt-2 grid grid-cols-2 gap-2">
+              <input id="lenMin" type="number" step="1" placeholder="Min" class="w-full rounded-md border border-steel-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <input id="lenMax" type="number" step="1" placeholder="Max" class="w-full rounded-md border border-steel-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+          </div>
+
+          <!-- Material -->
+          <div class="mt-5">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-steel-500">Material</label>
+            <select id="material" class="mt-2 w-full rounded-md border border-steel-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <option value="">Any</option>
+              <option>Stainless Steel</option>
+              <option>Music Wire</option>
+              <option>Phosphor Bronze</option>
+              <option>Oil Tempered</option>
+            </select>
+          </div>
+
+          <!-- Spring Rate -->
+          <div class="mt-5">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-steel-500">Spring Rate (N/mm)</label>
+            <div class="mt-2 grid grid-cols-2 gap-2">
+              <input id="rateMin" type="number" step="0.1" placeholder="Min" class="w-full rounded-md border border-steel-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <input id="rateMax" type="number" step="0.1" placeholder="Max" class="w-full rounded-md border border-steel-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+          </div>
+
+          <!-- Load -->
+          <div class="mt-5">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-steel-500">Max Load (N)</label>
+            <div class="mt-2 grid grid-cols-2 gap-2">
+              <input id="loadMin" type="number" step="1" placeholder="Min" class="w-full rounded-md border border-steel-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <input id="loadMax" type="number" step="1" placeholder="Max" class="w-full rounded-md border border-steel-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+          </div>
+
+          <button id="applyFilters" class="mt-6 w-full rounded-md bg-steel-900 px-4 py-2.5 text-white font-semibold hover:bg-black transition">Apply Filters</button>
+          <p class="mt-3 text-[11px] leading-4 text-steel-500">Attributes live in Shopify metafields for speed & easy expansion. Storefront filtering runs via Shopify Search & Discovery or a lightweight client script.</p>
+        </div>
+      </aside>
+
+      <!-- Results -->
+      <div class="lg:col-span-9">
+        <div class="flex items-center justify-between">
+          <div id="resultCount" class="text-sm text-steel-700 font-medium">Showing 0 results</div>
+          <div class="flex items-center gap-2 text-sm">
+            <label class="text-steel-600">Sort</label>
+            <select id="sortBy" class="rounded-md border border-steel-300 px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <option value="relevance">Relevance</option>
+              <option value="wireAsc">Wire Dia: Low to High</option>
+              <option value="wireDesc">Wire Dia: High to Low</option>
+              <option value="odAsc">OD: Low to High</option>
+              <option value="odDesc">OD: High to Low</option>
+            </select>
+          </div>
+        </div>
+        <div id="grid" class="mt-4 grid sm:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Product Page Mock -->
+<section id="product" class="py-16 lg:py-24">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid lg:grid-cols-2 gap-10 items-start">
+      <div class="rounded-2xl border border-steel-200 bg-white p-4 shadow-card">
+        <div class="grid grid-cols-2 gap-4">
+          <img src="https://i.postimg.cc/g0W1mCVc/TENSION-SPRING-IMAGE.png" alt="Tension Spring" class="rounded-xl border border-steel-100 bg-steel-50 object-contain aspect-square p-4">
+          <img src="https://i.postimg.cc/Y2LcNzCG/TORSION-SPRING-IMAGE.png" alt="Torsion Spring" class="rounded-xl border border-steel-100 bg-steel-50 object-contain aspect-square p-4">
+        </div>
+        <div class="mt-4 grid grid-cols-4 gap-3 text-[11px] text-steel-600">
+          <div class="rounded-lg border border-steel-200 p-2 text-center">ISO 10243</div>
+          <div class="rounded-lg border border-steel-200 p-2 text-center">RoHS</div>
+          <div class="rounded-lg border border-steel-200 p-2 text-center">DIN 2095</div>
+          <div class="rounded-lg border border-steel-200 p-2 text-center">Custom cuts</div>
+        </div>
+      </div>
+      <div>
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center gap-2 rounded-full bg-steel-50 border border-steel-200 px-2.5 py-1 text-[11px] font-semibold text-steel-700">
+            SKU: CS-10243-055
+          </span>
+          <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-green-700 bg-green-50 border border-green-200 px-2.5 py-1 rounded-full">In Stock</span>
+        </div>
+        <h3 class="mt-3 text-2xl sm:text-3xl font-extrabold tracking-tight">Compression Spring 12×50 mm – Stainless</h3>
+        <p class="mt-2 text-steel-700">Industrial compression spring for jigs, fixtures, dies & automation. Specs-first layout for quick confirmation.</p>
+
+        <!-- Spec Table Above the Fold -->
+        <div class="mt-5 rounded-2xl border border-steel-200 overflow-hidden shadow-card">
+          <div class="bg-steel-50 px-4 py-2 border-b border-steel-200 flex items-center justify-between">
+            <h4 class="font-bold">Key Specifications</h4>
+            <span class="text-[11px] text-steel-600 font-mono">Metafields → Spec Table</span>
+          </div>
+          <table class="w-full text-sm spec">
+            <tbody>
+              <tr class="border-b border-steel-100">
+                <td class="text-steel-500 font-mono">Wire Diameter</td>
+                <td class="font-bold">1.2 mm</td>
+                <td class="text-steel-500 font-mono">Outer Diameter</td>
+                <td class="font-bold">12.0 mm</td>
+              </tr>
+              <tr class="border-b border-steel-100 bg-steel-25">
+                <td class="text-steel-500 font-mono">Free Length</td>
+                <td class="font-bold">50.0 mm</td>
+                <td class="text-steel-500 font-mono">Material</td>
+                <td class="font-bold">Stainless Steel 302</td>
+              </tr>
+              <tr>
+                <td class="text-steel-500 font-mono">Spring Rate</td>
+                <td class="font-bold">4.8 N/mm</td>
+                <td class="text-steel-500 font-mono">Max Load</td>
+                <td class="font-bold">96 N</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-5 flex flex-wrap items-center gap-3">
+          <button class="inline-flex items-center gap-2 rounded-md bg-brand-500 px-5 py-3 font-semibold text-white shadow-soft hover:bg-brand-600 transition">
+            Add to Quote
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V7h2v4h4v2h-4v4h-2v-4H7v-2h4z"/></svg>
+          </button>
+          <button class="inline-flex items-center gap-2 rounded-md border border-steel-300 px-5 py-3 font-semibold text-steel-800 hover:bg-steel-50 transition">
+            Download CAD/Datasheet
+          </button>
+          <p class="text-xs text-steel-600">Lead time: 2–4 days • MOQ 10 • Bulk pricing available</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Deliverables -->
+<section id="deliverables" class="py-16 bg-steel-50 border-y border-steel-100">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="max-w-2xl">
+      <h2 class="text-3xl font-extrabold tracking-tight">What you get</h2>
+      <p class="mt-2 text-steel-700">Clear scope, fast delivery, and an easy handover so your team can add future SKUs without me.</p>
+    </div>
+    <div class="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="rounded-2xl border border-steel-200 bg-white p-6 shadow-card">
+        <h4 class="font-bold">1. CSV Import & Mapping</h4>
+        <p class="mt-1 text-sm text-steel-700">Import 100–500 SKUs. Create products, options, images, SEO, and metafields for all engineering attributes.</p>
+      </div>
+      <div class="rounded-2xl border border-steel-200 bg-white p-6 shadow-card">
+        <h4 class="font-bold">2. Metafield-driven Filters</h4>
+        <p class="mt-1 text-sm text-steel-700">Wire dia, OD, length, material, rate & load. Built with Shopify Search & Discovery + lean JS (no app bloat).</p>
+      </div>
+      <div class="rounded-2xl border border-steel-200 bg-white p-6 shadow-card">
+        <h4 class="font-bold">3. Industrial Templates</h4>
+        <p class="mt-1 text-sm text-steel-700">Collection & product templates with spec table above the fold, functional icons, greys, and whitespace.</p>
+      </div>
+      <div class="rounded-2xl border border-steel-200 bg-white p-6 shadow-card">
+        <h4 class="font-bold">4. Homepage & Navigation</h4>
+        <p class="mt-1 text-sm text-steel-700">Straightforward homepage, logical mega menu, header/footer, announcement bar, trust badges.</p>
+      </div>
+      <div class="rounded-2xl border border-steel-200 bg-white p-6 shadow-card">
+        <h4 class="font-bold">5. Speed & Mobile QA</h4>
+        <p class="mt-1 text-sm text-steel-700">Image optimization, lazy load, minimal JS, accessibility checks, and Lighthouse pass.</p>
+      </div>
+      <div class="rounded-2xl border border-steel-200 bg-white p-6 shadow-card">
+        <h4 class="font-bold">6. Handover Guide</h4>
+        <p class="mt-1 text-sm text-steel-700">Short walkthrough (PDF/video) showing how to add SKUs and keep filters working.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Case Study / Live Example -->
+<section id="case" class="py-16 lg:py-24">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid lg:grid-cols-2 gap-10 items-center">
+      <div>
+        <h2 class="text-3xl font-extrabold tracking-tight">Live Shopify example with custom metafield filtering</h2>
+        <p class="mt-3 text-steel-700">Engineering components store (bearings & springs) — collection filters run on metafields: bore, OD, width, material, dynamic load. Fast, app-free filtering + clear spec tables on PDP.</p>
+        <ul class="mt-4 space-y-2 text-sm text-steel-700 list-disc pl-5">
+          <li>1,200+ SKUs imported via CSV with image mapping</li>
+          <li>Filters: bore/OD/width/material/load (metafields)</li>
+          <li>Spec table above the fold + downloadable datasheets</li>
+          <li>Mobile Lighthouse 90+ on collection & product</li>
+        </ul>
+        <div class="mt-5 flex gap-3">
+          <a href="#" class="inline-flex items-center gap-2 rounded-md bg-steel-900 px-4 py-2.5 text-white font-semibold hover:bg-black transition">Open Live Store</a>
+          <a href="#contact" class="inline-flex items-center gap-2 rounded-md border border-steel-300 px-4 py-2.5 font-semibold text-steel-800 hover:bg-steel-50 transition">Request Walkthrough</a>
+        </div>
+        <p class="mt-3 text-xs text-steel-500">*Link & credentials provided on request (NDA-friendly).</p>
+      </div>
+      <div class="rounded-2xl border border-steel-200 bg-white p-4 shadow-card">
+        <img src="https://themanufacturer-cdn-1.s3.eu-west-2.amazonaws.com/wp-content/uploads/2019/02/14113612/On-the-path-to-a-clean-and-efficient-manufacturing-floor-stock-image-courtesy-of-APS-1024x713.jpeg?q=80&w=2000&auto=format&fit=crop" alt="Industrial shop floor" class="rounded-xl border border-steel-100">
+        <div class="mt-4 grid grid-cols-3 gap-3 text-center text-xs">
+          <div class="rounded-lg bg-steel-50 p-3 border border-steel-100">
+            <p class="font-mono text-steel-500">SKUs</p>
+            <p class="font-bold text-steel-900">1,200+</p>
+          </div>
+          <div class="rounded-lg bg-steel-50 p-3 border border-steel-100">
+            <p class="font-mono text-steel-500">Filter Speed</p>
+            <p class="font-bold text-steel-900">&lt; 150ms</p>
+          </div>
+          <div class="rounded-lg bg-steel-50 p-3 border border-steel-100">
+            <p class="font-mono text-steel-500">Mobile</p>
+            <p class="font-bold text-steel-900">90+ LH</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Process / Timeline -->
+<section class="py-16 bg-steel-50 border-y border-steel-100">
+  <div class="max-w-7xl mx-auto px-4">
+    <h2 class="text-3xl font-extrabold tracking-tight">Simple 10–15 day plan</h2>
+    <div class="mt-8 grid md:grid-cols-5 gap-4">
+      <div class="rounded-2xl bg-white border border-steel-200 p-5 shadow-card">
+        <div class="text-xs font-bold text-brand-600">Day 1–2</div>
+        <h4 class="font-bold mt-1">Audit & Map</h4>
+        <p class="text-sm text-steel-700 mt-1">Review CSV, define metafields, confirm filter ranges.</p>
+      </div>
+      <div class="rounded-2xl bg-white border border-steel-200 p-5 shadow-card">
+        <div class="text-xs font-bold text-brand-600">Day 3–6</div>
+        <h4 class="font-bold mt-1">Import & Theme</h4>
+        <p class="text-sm text-steel-700 mt-1">Import SKUs, set up industrial theme & sections.</p>
+      </div>
+      <div class="rounded-2xl bg-white border border-steel-200 p-5 shadow-card">
+        <div class="text-xs font-bold text-brand-600">Day 7–9</div>
+        <h4 class="font-bold mt-1">Filters & PDP</h4>
+        <p class="text-sm text-steel-700 mt-1">Hook metafields to filters & spec tables.</p>
+      </div>
+      <div class="rounded-2xl bg-white border border-steel-200 p-5 shadow-card">
+        <div class="text-xs font-bold text-brand-600">Day 10–12</div>
+        <h4 class="font-bold mt-1">Speed & Mobile</h4>
+        <p class="text-sm text-steel-700 mt-1">Optimize images, QA across devices.</p>
+      </div>
+      <div class="rounded-2xl bg-white border border-steel-200 p-5 shadow-card">
+        <div class="text-xs font-bold text-brand-600">Day 13–15</div>
+        <h4 class="font-bold mt-1">Handover</h4>
+        <p class="text-sm text-steel-700 mt-1">Training doc/video + final tweaks.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-16">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid lg:grid-cols-3 gap-6">
+      <div class="rounded-2xl border border-steel-200 p-6 shadow-card bg-white">
+        <div class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-full bg-steel-100"></div>
+          <div>
+            <p class="font-bold">K. Mehta</p>
+            <p class="text-xs text-steel-600">Procurement, Auto Components</p>
+          </div>
+        </div>
+        <p class="mt-3 text-steel-700 text-sm">“Filtering by OD and wire dia is instant. Engineers find the right spring without calling us.”</p>
+      </div>
+      <div class="rounded-2xl border border-steel-200 p-6 shadow-card bg-white">
+        <div class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-full bg-steel-100"></div>
+          <div>
+            <p class="font-bold">S. Rao</p>
+            <p class="text-xs text-steel-600">Founder, SpringTech</p>
+          </div>
+        </div>
+        <p class="mt-3 text-steel-700 text-sm">“Clean industrial look, spec table above the fold—exactly what our buyers wanted.”</p>
+      </div>
+      <div class="rounded-2xl border border-steel-200 p-6 shadow-card bg-white">
+        <div class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-full bg-steel-100"></div>
+          <div>
+            <p class="font-bold">A. Desai</p>
+            <p class="text-xs text-steel-600">Ops, MRO Distributor</p>
+          </div>
+        </div>
+        <p class="mt-3 text-steel-700 text-sm">“CSV import + metafields made scaling to 500 SKUs painless. Mobile is super fast.”</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="py-10 bg-steel-50 border-y border-steel-100">
+  <div class="max-w-5xl mx-auto px-4">
+    <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">FAQ</h2>
+    <div class="mt-6 grid md:grid-cols-2 gap-5">
+      <div class="rounded-xl border border-steel-200 bg-white p-5">
+        <h4 class="font-bold">Do I need a paid filter app?</h4>
+        <p class="text-sm text-steel-700 mt-1">No. We use Shopify Search & Discovery with metafields + minimal JS. Fast and no monthly fee.</p>
+      </div>
+      <div class="rounded-xl border border-steel-200 bg-white p-5">
+        <h4 class="font-bold">Can my team add new SKUs later?</h4>
+        <p class="text-sm text-steel-700 mt-1">Yes. I’ll provide a short guide + CSV template so your metafields stay consistent.</p>
+      </div>
+      <div class="rounded-xl border border-steel-200 bg-white p-5">
+        <h4 class="font-bold">Will it work on mobile?</h4>
+        <p class="text-sm text-steel-700 mt-1">Absolutely. We optimize images, use lightweight components, and test on real devices.</p>
+      </div>
+      <div class="rounded-xl border border-steel-200 bg-white p-5">
+        <h4 class="font-bold">Can we show CAD/datasheets?</h4>
+        <p class="text-sm text-steel-700 mt-1">Yes, per product. We’ll add a “Downloads” block in the PDP metafields.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact" class="py-16 lg:py-24">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid lg:grid-cols-2 gap-10 items-start">
+      <div>
+        <h2 class="text-3xl font-extrabold tracking-tight">Get in touch</h2>
+        <p class="mt-2 text-steel-700">Share your CSV (or a sample) and I’ll reply with a fixed scope, timeline, and price.</p>
+        <form class="mt-6 grid gap-4">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <input required type="text" placeholder="Your Name" class="rounded-md border border-steel-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <input required type="email" placeholder="Email" class="rounded-md border border-steel-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500">
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <input type="text" placeholder="Company" class="rounded-md border border-steel-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <input type="tel" placeholder="Phone / WhatsApp" class="rounded-md border border-steel-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500">
+          </div>
+          <textarea rows="4" placeholder="Tell me about your catalog (SKUs, attributes, examples)…" class="rounded-md border border-steel-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+          <div class="flex items-center gap-3">
+            <button type="submit" class="inline-flex items-center gap-2 rounded-md bg-brand-500 px-5 py-3 font-semibold text-white shadow-soft hover:bg-brand-600 transition">Send Message</button>
+            <span class="text-xs text-steel-600">Or email: hello@springsos.example</span>
+          </div>
+        </form>
+        <div class="mt-6 flex flex-wrap items-center gap-4 text-sm text-steel-700">
+          <div class="flex items-center gap-2"><svg class="h-4 w-4 text-brand-600" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 5v5l4 2-.8 1.6L11 13V7h2z"/></svg> Response within 12 hours</div>
+          <div class="flex items-center gap-2"><svg class="h-4 w-4 text-brand-600" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2l-3.5-3.5-1.4 1.4 4.9 4.9 10-10-1.4-1.4z"/></svg> NDA available</div>
+        </div>
+      </div>
+      <div class="rounded-2xl overflow-hidden border border-steel-200 shadow-card">
+        <iframe title="Map" class="w-full h-[420px]" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d241317.116099016!2d72.741099!3d19.082197!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b63ebf1f1f1f%3A0x1!2sMumbai!5e0!3m2!1sen!2sin!4v1700000000000"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="border-t border-steel-200 bg-steel-900 text-steel-200">
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="grid md:grid-cols-4 gap-8">
+      <div>
+        <div class="flex items-center gap-3">
+          <img src="https://i.postimg.cc/MTb6z0Md/SPRINGSOS-LOGO-orange-transparent.png" class="h-8" alt="">
+          <span class="font-extrabold text-white">Springs<span class="text-brand-500">OS</span></span>
+        </div>
+        <p class="mt-3 text-sm text-steel-400">Industrial Shopify builds for springs, fasteners, bearings, and engineering parts.</p>
+      </div>
+      <div>
+        <h5 class="font-bold text-white">Services</h5>
+        <ul class="mt-3 space-y-2 text-sm text-steel-300">
+          <li>CSV import & mapping</li>
+          <li>Metafield filters</li>
+          <li>Industrial theme setup</li>
+          <li>Speed & mobile optimization</li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-bold text-white">Resources</h5>
+        <ul class="mt-3 space-y-2 text-sm text-steel-300">
+          <li><a href="#case" class="hover:text-white">Live Shopify example</a></li>
+          <li><a href="#deliverables" class="hover:text-white">Deliverables</a></li>
+          <li><a href="#product" class="hover:text-white">Product page spec table</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-bold text-white">Contact</h5>
+        <ul class="mt-3 space-y-2 text-sm text-steel-300">
+          <li>Email: hello@springsos.example</li>
+          <li>WhatsApp: +91-98XXX-XXXXX</li>
+          <li>Hours: Mon–Sat, 10:00–19:00 IST</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-8 pt-6 border-t border-steel-800 flex items-center justify-between text-xs text-steel-400">
+      <p>© <span id="year"></span> SpringsOS. All rights reserved developed by Zannatul.</p>
+      <p>Industrial, not glossy.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Mobile menu
+document.getElementById('menuBtn').addEventListener('click', () => {
+  document.getElementById('mobileMenu').classList.toggle('hidden');
+});
+
+// Year
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// Demo data (sample springs)
+const PRODUCTS = [
+  { title: 'Compression Spring 12×50', img:'https://i.postimg.cc/g0W1mCVc/TENSION-SPRING-IMAGE.png', wire:1.2, od:12, len:50, material:'Stainless Steel', rate:4.8, load:96 },
+  { title: 'Compression Spring 15×60', img:'https://i.postimg.cc/Y2LcNzCG/TORSION-SPRING-IMAGE.png', wire:1.5, od:15, len:60, material:'Music Wire', rate:6.2, load:140 },
+  { title: 'Tension Spring 10×45', img:'https://i.postimg.cc/g0W1mCVc/TENSION-SPRING-IMAGE.png', wire:0.9, od:10, len:45, material:'Phosphor Bronze', rate:2.4, load:55 },
+  { title: 'Torsion Spring 8×30', img:'https://i.postimg.cc/Y2LcNzCG/TORSION-SPRING-IMAGE.png', wire:0.8, od:8,  len:30, material:'Oil Tempered', rate:1.9, load:40 },
+  { title: 'Compression Spring 20×80', img:'https://i.postimg.cc/J48TyNyx/shopify-iamges-1.webp', wire:2.0, od:20, len:80, material:'Stainless Steel', rate:8.5, load:240 },
+  { title: 'Compression Spring 25×100', img:'https://i.postimg.cc/J48TyNyx/shopify-iamges-1.webp', wire:2.5, od:25, len:100, material:'Music Wire', rate:10.2, load:320 },
+  { title: 'Tension Spring 14×70', img:'https://i.postimg.cc/g0W1mCVc/TENSION-SPRING-IMAGE.png', wire:1.4, od:14, len:70, material:'Stainless Steel', rate:5.5, load:120 },
+  { title: 'Torsion Spring 18×55', img:'https://i.postimg.cc/Y2LcNzCG/TORSION-SPRING-IMAGE.png', wire:1.8, od:18, len:55, material:'Oil Tempered', rate:7.0, load:180 },
+  { title: 'Compression Spring 9×35', img:'https://i.postimg.cc/J48TyNyx/shopify-iamges-1.webp', wire:0.7, od:9, len:35, material:'Phosphor Bronze', rate:1.6, load:35 },
+];
+
+const grid = document.getElementById('grid');
+const resultCount = document.getElementById('resultCount');
+
+function passFilters(p, f) {
+  if (f.wireMin != null && p.wire < f.wireMin) return false;
+  if (f.wireMax != null && p.wire > f.wireMax) return false;
+  if (f.odMin != null && p.od < f.odMin) return false;
+  if (f.odMax != null && p.od > f.odMax) return false;
+  if (f.lenMin != null && p.len < f.lenMin) return false;
+  if (f.lenMax != null && p.len > f.lenMax) return false;
+  if (f.material && p.material !== f.material) return false;
+  if (f.rateMin != null && p.rate < f.rateMin) return false;
+  if (f.rateMax != null && p.rate > f.rateMax) return false;
+  if (f.loadMin != null && p.load < f.loadMin) return false;
+  if (f.loadMax != null && p.load > f.loadMax) return false;
+  return true;
+}
+
+function render(list) {
+  grid.innerHTML = '';
+  list.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'rounded-2xl border border-steel-200 bg-white p-4 shadow-card hover:shadow-soft transition';
+    card.innerHTML = `
+      <div class="aspect-[4/3] rounded-xl border border-steel-100 bg-steel-50 flex items-center justify-center overflow-hidden">
+        <img src="${p.img}" alt="${p.title}" class="h-full w-full object-contain p-4">
+      </div>
+      <div class="mt-3">
+        <h4 class="font-bold leading-tight">${p.title}</h4>
+        <p class="text-xs text-steel-600 mt-0.5">${p.material}</p>
+        <div class="mt-3 grid grid-cols-3 gap-2 text-[11px]">
+          <div class="rounded-lg border border-steel-200 p-2 text-center">
+            <div class="font-mono text-steel-500">Wire</div>
+            <div class="font-bold">${p.wire.toFixed(1)} mm</div>
+          </div>
+          <div class="rounded-lg border border-steel-200 p-2 text-center">
+            <div class="font-mono text-steel-500">OD</div>
+            <div class="font-bold">${p.od.toFixed(1)} mm</div>
+          </div>
+          <div class="rounded-lg border border-steel-200 p-2 text-center">
+            <div class="font-mono text-steel-500">Len</div>
+            <div class="font-bold">${p.len} mm</div>
+          </div>
+        </div>
+        <div class="mt-2 grid grid-cols-2 gap-2 text-[11px]">
+          <div class="rounded-lg bg-steel-50 border border-steel-200 p-2 flex items-center justify-between">
+            <span class="font-mono text-steel-500">Rate</span><span class="font-bold">${p.rate.toFixed(1)} N/mm</span>
+          </div>
+          <div class="rounded-lg bg-steel-50 border border-steel-200 p-2 flex items-center justify-between">
+            <span class="font-mono text-steel-500">Load</span><span class="font-bold">${p.load} N</span>
+          </div>
+        </div>
+        <div class="mt-3 flex gap-2">
+          <button class="flex-1 rounded-md bg-steel-900 text-white text-sm font-semibold py-2 hover:bg-black transition">View Specs</button>
+          <button class="rounded-md border border-steel-300 px-3 text-sm font-semibold hover:bg-steel-50 transition">Quote</button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+  resultCount.textContent = `Showing ${list.length} result${list.length===1?'':'s'}`;
+}
+
+function getFilters() {
+  const val = id => {
+    const el = document.getElementById(id);
+    if (!el || el.value === '') return null;
+    return el.type === 'number' ? parseFloat(el.value) : el.value;
+  };
+  return {
+    wireMin: val('wireMin'), wireMax: val('wireMax'),
+    odMin: val('odMin'), odMax: val('odMax'),
+    lenMin: val('lenMin'), lenMax: val('lenMax'),
+    material: val('material') || '',
+    rateMin: val('rateMin'), rateMax: val('rateMax'),
+    loadMin: val('loadMin'), loadMax: val('loadMax'),
+  };
+}
+
+function apply() {
+  const f = getFilters();
+  let list = PRODUCTS.filter(p => passFilters(p, f));
+  const sort = document.getElementById('sortBy').value;
+  if (sort === 'wireAsc') list.sort((a,b)=>a.wire-b.wire);
+  if (sort === 'wireDesc') list.sort((a,b)=>b.wire-a.wire);
+  if (sort === 'odAsc') list.sort((a,b)=>a.od-b.od);
+  if (sort === 'odDesc') list.sort((a,b)=>b.od-b.od);
+  render(list);
+}
+
+document.getElementById('applyFilters').addEventListener('click', apply);
+document.getElementById('resetFilters').addEventListener('click', () => {
+  document.querySelectorAll('aside input, aside select').forEach(el => el.value = '');
+  apply();
+});
+document.getElementById('sortBy').addEventListener('change', apply);
+
+// initial
+render(PRODUCTS);
+</script>
+</body>
+</html>
